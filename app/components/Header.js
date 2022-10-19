@@ -4,7 +4,8 @@ import HeaderLoggedOut from "./HeaderLoggedOut";
 import HeaderLoggedIn from "./HeaderLoggedIn";
 
 function Header() {
-  const [loggedIn, setLoggedIn] = useState();
+  //when the page first load, we want to check if data exist in local storage or not
+  const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem("complexappToken")));
 
   return (
     <header className="header-bar bg-primary mb-3">
