@@ -2,13 +2,13 @@ import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Page from "./Page";
 import Axios from "axios";
-import ExampleContext from "../ExampleContext";
+import DispatchContext from "../DispatchContext";
 
 function CreatePost(props) {
   const [title, setTitle] = useState();
   const [body, setBody] = useState();
   const navigate = useNavigate();
-  const { addFlashMessage } = useContext(ExampleContext); //which context we want to use:ExampleContext.js
+  const appDispatch = useContext(DispatchContext); //app mean global
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -17,7 +17,7 @@ function CreatePost(props) {
       //redirect to new post url, react router is managing the browser's history for us, useNavigate
       navigate(`/post/${response.data}`);
       //add flash message
-      addFlashMessage("Congrats, you successfully created a post!"); //pulling from Context
+      appDispatch({ type: "flashMessage", value: "Congrats, you created a new post." });
       console.log("New post was created.");
     } catch (e) {
       console.log("There was a problem.");
