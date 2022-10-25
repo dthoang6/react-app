@@ -13,6 +13,7 @@ import Terms from "./components/Terms";
 import CreatePost from "./components/CreatePost";
 import ViewSinglePost from "./components/ViewSinglePost";
 import FlashMessage from "./components/FlashMessage";
+import ExampleContext from "./ExampleContext";
 
 function Main() {
   const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem("complexappToken")));
@@ -22,18 +23,20 @@ function Main() {
     setFlashMessage(prev => prev.concat(msg)); //concat the message to previous message
   }
   return (
-    <BrowserRouter>
-      <FlashMessage messages={flashMessage} />
-      <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-      <Routes>
-        <Route path="/" element={loggedIn ? <Home /> : <HomeGuest />} />
-        <Route path="/post/:id" element={<ViewSinglePost />} />
-        <Route path="create-post" element={<CreatePost addFlashMessage={addFlashMessage} />} />
-        <Route path="about-us" element={<About />} />
-        <Route path="terms" element={<Terms />} />
-      </Routes>
-      <Footer />
-    </BrowserRouter>
+    <ExampleContext.Provider value={{ addFlashMessage, setLoggedIn }}>
+      <BrowserRouter>
+        <FlashMessage messages={flashMessage} />
+        <Header loggedIn={loggedIn} />
+        <Routes>
+          <Route path="/" element={loggedIn ? <Home /> : <HomeGuest />} />
+          <Route path="/post/:id" element={<ViewSinglePost />} />
+          <Route path="create-post" element={<CreatePost />} />
+          <Route path="about-us" element={<About />} />
+          <Route path="terms" element={<Terms />} />
+        </Routes>
+        <Footer />
+      </BrowserRouter>
+    </ExampleContext.Provider>
   );
 }
 
