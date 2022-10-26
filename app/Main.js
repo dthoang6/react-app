@@ -1,5 +1,6 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import ReactDOM from "react-dom/client";
+import { useImmerReducer } from "use-immer";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Axios from "axios";
 Axios.defaults.baseURL = "http://localhost:8080";
@@ -19,21 +20,47 @@ import DispatchContext from "./DispatchContext";
 function Main() {
   const initialState = {
     loggedIn: Boolean(localStorage.getItem("complexappToken")),
-    flashMessage: []
+    flashMessage: [],
+    //user object will be available from global state
+    user: {
+      token: localStorage.getItem("complexappToken"),
+      username: localStorage.getItem("complexappUsername"),
+      avatar: localStorage.getItem("complexappAvatar")
+    }
   };
-
-  function ourReducer(state, action) {
+  //only working with state
+  function ourReducer(draft, action) {
     switch (action.type) {
       case "login":
-        //return the object that mimics our initial state
-        return { loggedIn: true, flashMessage: state.flashMessage };
+        draft.loggedIn = true;
+        draft.user = action.data;
+        return;
       case "logout":
-        return { loggedIn: false, flashMessage: state.flashMessage };
+        draft.loggedIn = false;
+        return;
       case "flashMessage":
-        return { loggedIn: state.loggedIn, flashMessage: state.flashMessage.concat(action.value) };
+        draft.flashMessage.push(action.value); //directly modify or mutate this array
+        return;
     }
   }
-  const [state, dispatch] = useReducer(ourReducer, initialState);
+
+  const [state, dispatch] = useImmerReducer(ourReducer, initialState); //change from react native useReducer to useimmerReducer
+
+  //localStorage --> useEffect(a,b) a is a function, b is a list or an array of dependencies that you want to watch for changes. Any time it changes, the function a will run.
+  useEffect(() => {
+    if (state.loggedIn) {
+      //save data to localStorage
+      localStorage.setItem("complexappToken", state.user.token);
+      localStorage.setItem("complexappUsername", state.user.username);
+      localStorage.setItem("complexappAvatar", state.user.avatar);
+    } else {
+      //remove data from localStorage
+      localStorage.removeItem("complexappToken");
+      localStorage.removeItem("complexappUsername");
+      localStorage.removeItem("complexappAvatar");
+    }
+  }, [state.loggedIn]);
+
   return (
     <StateContext.Provider value={state}>
       <DispatchContext.Provider value={dispatch}>
