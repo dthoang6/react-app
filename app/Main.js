@@ -4,6 +4,8 @@ import { useImmerReducer } from "use-immer";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Axios from "axios";
 Axios.defaults.baseURL = "http://localhost:8080";
+import StateContext from "./StateContext";
+import DispatchContext from "./DispatchContext";
 //my components
 import Footer from "./components/Footer";
 import Header from "./components/Header";
@@ -14,8 +16,7 @@ import Terms from "./components/Terms";
 import CreatePost from "./components/CreatePost";
 import ViewSinglePost from "./components/ViewSinglePost";
 import FlashMessage from "./components/FlashMessage";
-import StateContext from "./StateContext";
-import DispatchContext from "./DispatchContext";
+import Profile from "./components/Profile";
 
 function Main() {
   const initialState = {
@@ -68,6 +69,7 @@ function Main() {
           <FlashMessage messages={state.flashMessage} />
           <Header />
           <Routes>
+            <Route path="/profile/:username/*" element={<Profile />} />
             <Route path="/" element={state.loggedIn ? <Home /> : <HomeGuest />} />
             <Route path="/post/:id" element={<ViewSinglePost />} />
             <Route path="create-post" element={<CreatePost />} />
