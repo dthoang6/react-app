@@ -9,7 +9,7 @@ function Profile() {
   const { username } = useParams();
   const appState = useContext(StateContext);
   const [profileData, setProfileData] = useState({
-    profileUsername: "dat",
+    profileUsername: "...",
     profileAvatar: "https://gravatar.com/avatar/0df996444b997c0b17a67bffc0c8b8c2?s=128",
     isFollowing: false,
     counts: {
@@ -20,15 +20,21 @@ function Profile() {
   });
 
   useEffect(() => {
+    const ourRequest = Axios.CancelToken.source();
     async function fetchData() {
       try {
-        const response = await Axios.post(`/profile/${username}`, { token: appState.user.token });
+        const response = await Axios.post(`/profile/${username}`, { token: appState.user.token }, { cancelToken: ourRequest.token });
         setProfileData(response.data);
       } catch (e) {
         console.log("There was a problem.");
       }
     }
     fetchData();
+    //clean up function: cancel this axios request when component is unmounted
+    return () => {
+      //identify the request
+      ourRequest.cancel();
+    };
   }, []);
 
   return (
