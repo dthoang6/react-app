@@ -1,0 +1,15 @@
+1. The 10 days of React
+2. Getting ready to create a real world app
+3. Let's start building our app
+4. Working with real back end
+5. Connecting the frond end and back end
+6. Leveling the way we approaching state
+7. Actually building our app
+8. Edit & Delete post actions
+9. Search Overlay
+10. Letting users follow each other
+11. Building a live chat feature
+12. Registration Form Validation
+13. Getting ready to go live
+14. Concurrent React
+15. Extra Credit
