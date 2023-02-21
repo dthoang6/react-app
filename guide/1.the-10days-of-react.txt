@@ -1,0 +1,467 @@
+1. What problem does react solve?
+  - react is a javascript library.
+  - let us keep data outside of the DOM so working with the data is simple and fast.
+  - as our data changes, it reacts by re-rendering only the exact tiny pieces of the DOM that actually need to be re-rendered because they are now different.
+
+2. Let's start using react
+  - codepen: add react library, react-dom for web application in the context of web browser.
+  - the real magic of react is that we declared our entire interface in one convenient location and then we re-rendering only the tiny little part of the DOM that actually needs to get updated and replaced.
+
+  html: <div id="app"></div>
+  js:
+  //element or component function
+  //behind the scenes when JSX be converted by babel
+  import react from "React"
+  import react-dom from "React-DOM"
+
+  function OurApp() {
+    return React.createElement("div", null, [
+      React.createElement("h1", null, "Our amazing app header")
+      React.createElement("p", null, `The current time is ${new Date().toLocaleString()} `)
+      React.createElement("mall", null, "Copyright Footer Text")
+    ])
+  }
+  const root = ReactDOM.createRoot(document.querySelector("#app"))
+  setInterval(function() {
+    root.render(React.createElement(OurApp))
+  }, 1000)
+
+--------------------------------------------
+3. What is JSX?
+- JSX makes creating elements and components with React almost as easy as just writing plain HTML
+- JSX looks like HTML but it is javascript.
+- JSX is a syntax extension to javascript.
+- JSX is more intuitive syntax.
+
+- write above code using JSX, behind the scenes, this code will be converted to above code using babel.
+function OurApp() {
+  return (
+    <>
+      <h1>Our amazing app</h1>
+      <p>The current time is blank</p>
+      <small>Copyright Footer Text</small>
+    </>
+  )
+}
+- one top level element with React fragment <>....</>
+- class is reserved word in JSX
+- styling with className="css-class-name"
+- dynamic code by using: {...} instead of ${...}
+- render component: root.render(<ComponentName />)
+-----------------------------------------------------
+4. Staying organized: components using other components
+- How one react component can use or leverage another react component?
+- breaking down your code into single responsibility component.
+- our main component is references or point towards that components to stay organized.
+- Main component become one centrally located, or cohesive place to assemble our interface.
+
+function OurApp() {
+  return (
+    <>
+      <Header />
+      <Body />
+      <Footer />
+    </>
+  )
+}
+--------------------------------------------
+5. Using props to make a components flexible
+- we want to render some components more than once. Like list of blog posts, or status update.
+- the idea of reusing components by using props
+- props let us pass data into a component which really lets the component come alive in terms of being flexible and reusable.
+
+- in React, when we create a component, we're essentially creating our own custom element type.
+- We can use props to pass piece of data into any component.
+
+function OurApp() {
+  return (
+    <>
+      <Pet name="Meo" species="cat" age="5" />
+      <Pet name="Tom" species="dog" age="2" />
+      <Pet name="Lan" species="cat" age="1" />
+    </>
+  )
+}
+function Pet(props) {
+  return <li>{props.name} is a {props.species} and is {props.age} years old.</li>
+}
+
+- we want to display actual information for each pet like their name, species, and age
+- we can add props for name, species and age.
+
+- so name, species, age are props that we are using to passing data into the Pet Component.
+- so we can use these props data within our Pet component: props.name, props.species, props.age
+
+- but what if we have 300 props and we may want to reuse Pet component 5000 times? in real world, when you're working with decent amount of data it is usually an array of data.
+- so you want to programmatically loop through the array and do something once for each item in the collection.
+
+6. Looping through an array within JSX
+- how to loop through an array of items within the context of JSX?
+- how to render the Pet component once for each pet and feed it the appropriate data and props?
+
+- within JSX, we can include JS within {} and then just include an array of components
+
+{[component1, component2, ...]}
+
+{[<li>component1</li>, <li>component2</li>, ...]}
+
+//this is not the idea way to store data in memory with React, we will learn it later.
+const pets = [
+  { name: "Meowsalot", species: "cat", age: "5", id: 123456789 },
+  { name: "Barksalot", species: "dog", age: "3", id: 987654321 },
+  { name: "Fluffy", species: "rabbit", age: "2", id: 123123123 },
+  { name: "Purrsloud", species: "cat", age: "1", id: 456456456 },
+  { name: "Paws", species: "dog", age: "6", id: 789789789 }
+]
+
+function OurApp() {
+  return (
+    <>
+      //we want to return an array of components
+      //whatever we return in the function, is going to get added onto a brand new array that map returns.
+      //id: react has this unique identifier or key to track each component or each instance of component.
+      <ul>
+        {pets.map(pet => return <Pet name={pet.name} species={pet.species} age={pet.age} key={pet.id} />)}
+      </ul>
+    </>
+  )
+}
+function Pet(props) {
+  return <li>{props.name} is a {props.species} and is {props.age} years old.</li>
+}
+-----------------------------
+7. State
+- State is how we store the data of our app in memory with React.
+- as our State data changes or we update State data, React automatically re renders our interface for us.
+
+- the whole idea behind React is that we managing our app's data or the app's State and then as State changes, React automatically re-renders things on its own at the appropriate time.
+- how do we use State, how do we access State? how do we start working with State?
+- how do we tell React to store something in its State?
+  - adjust OurTime component to stores the current time in State, and whenever we change that State value, React will re-render OurTime component.
+  - the React library has a function named useState that lets us working with State data so we need to import it.
+
+  - useState function return an array with two items, the first item lets us access the current State value, the second item is the function we can call to update the State value.
+  - we need to destructuring the return array: const [theState, setTheState] = useState(...data we want to store in State)
+
+  -
+
+import React, { useEffect, useState, useContext } from "react";
+const pets = [
+  { name: "Meowsalot", species: "cat", age: "5", id: 123456789 },
+  { name: "Barksalot", species: "dog", age: "3", id: 987654321 },
+  { name: "Fluffy", species: "rabbit", age: "2", id: 123123123 },
+  { name: "Purrsloud", species: "cat", age: "1", id: 456456456 },
+  { name: "Paws", species: "dog", age: "6", id: 789789789 }
+]
+
+function OurApp() {
+  return (
+    <>
+      <OurTime />
+      <ul>
+        {pets.map(pet => return <Pet name={pet.name} species={pet.species} age={pet.age} key={pet.id} />)}
+      </ul>
+    </>
+  )
+}
+//example of updating State in the event of time passing.
+function OurTime() {
+  //initial run
+  const [theTime, setTheTime] = useState(new Date().toLocaleString())
+
+  //setTimeout is not the most optimal way of updating something. We will learn about useEffect to setup timing situation.
+  setTimeout(function() {
+    setTheTime(new Date().toLocaleString());//wait 1s and update the State value again.
+  }, 1000)
+
+  return <p>The current time is {theTime}</p>
+}
+
+function Pet(props) {
+  return <li>{props.name} is a {props.species} and is {props.age} years old.</li>
+}
+
+const root = ReactDOM.createRoot(document.querySelector("#app"))
+root.render(<OurApp />)
+-----------------------------
+8. Handling Events with State
+- learn how to respond to the event of a user clicking on a button: add the props to button element: 
+- how to update State in the clicking event to keep track of how many likes have been click? setup a State with initial value
+
+function OurApp() {
+  return (
+    <>
+      <LikeArea />
+    </>
+  )
+}
+
+function LikeArea() {
+  //setup the State: 0 is the initial value for the like counter
+  const [likeCount, setLikeCount] = useState(0);
+
+  function increaseLikeHandler() {
+    setLikeCount(function(prev) {
+      return prev + 1
+    })
+  }
+  function decreaseLikeHandler() {
+    setLikeCount(function(prev) {
+      if (prev > 0) {
+        return prev - 1
+      }
+      return 0
+    })
+  }
+  //LikeArea Component
+  return (
+    <>
+      //add the props onClick to button to call the function when user click the button.
+
+      <button onClick={increaseLikeHandler}>Increase likes</button>
+      <button onClick={decreaseLikeHandler}>Decrease likes</button>
+      <h2>This page has been liked {likeCount} times.</h2>
+    </>
+  )
+}
+
+const root = ReactDOM.createRoot(document.querySelector("#app"))
+root.render(<OurApp />)
+
+----------------------------
+9. Working with Forms
+- create a component: AddPetForm
+- respond to the event of this form being submitted: add a props to the form element: onSubmit={handleSubmit}
+- set up a State to receive the data from the form
+
+
+function AddPetForm(props) {
+    //we are not going to manually read the values from these fields right directly from the DOM
+    //instead, we're going to listen for the event that the value of a field change by using props to pass that data into AddPetForm.
+
+    //and then, every time a field changes its value, we're going to store its newest value in State.
+    //so Then, when the user actually submits the form, we don't need to go retrieve any values from the DOM.
+    //we can just work with data that is already in State.
+
+    //add the props named onChange to the input field: onChange={e => setName(e.target.value)}
+
+    const [name, setName] = useState()
+    const [species, setSpecies] = useState()
+    const [age, setAge] = useState()
+
+
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    //update the state of the list of pets by using setPets props
+    //within () for setPets, we want the new value to based on the previous value
+    //in React we don't want to directly mutate, modify the state, we just want to give React the new desired value and let React handle things from there: using concat vs push.
+
+    props.setPets(prev => return prev.concat({name, species, age, id: Date.now() }))
+
+    //set the value of the input field to empty string after submit.
+    setName("")
+    setSpecies("")
+    setAge("")
+
+  }
+  return (
+    <form onSubmit={handleSubmit}>
+      <fieldset>
+        <legend>Add New Pet</legend>
+        <input value="name" onChange={e => setName(e.target.value)} placeholder="Name" /> 
+        <input value="species" onChange={e => setSpecies(e.target.value)} placeholder="species" />
+        <input value="age" onChange={e => setAge(e.target.value)} placeholder="age in years" />
+        <button>Add Pet</button>
+      </fieldset>
+    </form>
+  )
+}
+
+function OurApp() {
+  //set up the State, we have no way of accessing this setPets from within our AddPetForm component
+  //to get around this, we will learn about different strategies later on in the course
+  //for now, we add a props of setPets when we rendering the AddPetForm component: setPets={setPets}
+
+  const [pets, setPets] = useState([])
+  return (
+    <>
+      <LikeArea />
+      <AddPetForm setPets={setPets} />
+    </>
+  )
+}
+---------------------------
+10. What is useEffect?
+- is our way of including code within our component but only actually running it at the specific times that we want to run it.
+- every thing in React is based around our state, it's incredibly powerful to be able to run custom functions whenever a certain piece of state changes by using useEffect hook function.
+
+- if the user click the delete button, we want to go into the State of all of our pets.
+- Find the item that has matching ID and remove it from the array
+
+- first, add a props to Pet Component: id={pet.id}, add a props to delete button: onClick={handleDelete}
+- we want to update the State of all of our Pets, and the Pets State live in OurApp Component not the Pet Component.
+- so we need to add a props: setPets={setPets} in the Pet Component when we going through an array to render Pet Component to access the Pets State live in OurApp Component.
+- then we can access the props in Pet Component Function: props.id, props.setPets
+-----
+- set thing up so that when the page gets reloaded, we don't lose our data.
+- the idea of persistent data with local storage in the web browser has nothing to do with React, it's the nature of web browser.
+
+- local storage in the browser only accepts a simple string of text, not actual code or data.
+- our pet state is an array.
+- converting JSON strings into JavaScript objects: JSON.parse()
+- converting an object into a JSON string: JSON.stringify()
+
+  localStorage.setItem(a, b)
+  - a = "examplePetData" is the name that you make up for this piece of data, which the browser's going to store.
+  - b: JSON.stringify() want to store our pets data into local storage by converting an array of objects to string of text
+
+- How we achieve the persistent data in the context of React?
+  - step 1: first time running, load any existing data from localStorage into State, then save our latest data back into the browser's local storage.
+  - the whole situation of needing to do something during a certain circumstance like this is where useEffect comes into play.
+  - we use useEffect to do something first time our Pet State loading.
+
+  useEffect(a, b)
+  a = function of code that you want to run.
+  b = list the dependencies or the things that you want to watch for changes. Then only when React detects that those things have changed, it call your function.
+
+  - step 2: when we want to do something every time our pet data state changes
+
+- Interval is an ongoing instance in the browser that's going to fire the function once every second.
+    - with useEffect we can run a bit of code only the first time this component TimeArea render.
+    - in the real world, when you're doing something in the future, you want to be able to cancel it or negate it if this component gets unmounted or removed from the page before this action completes.
+    - for example: you could navigate to a new screen that did not need to show the time, then this TimeArea component would be unmounted or it would no longer be displayed.
+      - using clean up function within useEffect: within useEffect(a, b) function, we can return a function that React use as our clean up function so that if this component is no longer needed on the screen, the web browser has a way of cleaning up effects.
+
+    useEffect(() => {
+      const interval = setInterval(() => setTheTime(new Date().toLocaleString()), 1000)
+
+      return () => clearInterval(interval)
+    }, [])
+
+
+--------------------------------
+const useState = React.useState
+const useEffect = React.useEffect
+
+function OurApp() {
+  const [pets, setPets] = useState([])
+  //only run once for the first time this component is rendered
+  useEffect( () => {
+    if (localStorage.getItem("examplePetData")) {
+      setPets(JSON.parse(localStorage.getItem("examplePetData")))
+    }
+  } , [])
+  
+  //run every time our pet state changes
+  useEffect( () => {
+    localStorage.setItem("examplePetData", JSON.stringify(pets))
+  } , [pets])
+  
+  return (
+    <>
+      <OurHeader />
+      <LikeArea />
+      <TimeArea />
+      <AddPetForm setPets={setPets}/>
+      <ul>
+        {pets.map(pet => <Pet setPets={setPets} id={pet.id} name={pet.name} species={pet.species} age={pet.age} key={pet.id} />)}
+      </ul>
+      <Footer />
+    </>
+  )
+}
+-----------
+function AddPetForm(props) {
+  const [name, setName] = useState()
+  const [species, setSpecies] = useState()
+  const [age, setAge] = useState()
+  
+  function handleSubmit(e) {
+    e.preventDefault()
+    props.setPets(prev => prev.concat({name, species, age, id: Date.now()}))
+    setName("")
+    setSpecies("")
+    setAge("")
+  }
+  return (
+    <form onSubmit = {handleSubmit}>
+      <fieldset>
+        <legend>Add New Pet</legend>
+        <input value={name} onChange={e => setName(e.target.value)} placeholder="Name" />
+        <input value={species} onChange={e => setSpecies(e.target.value)} placeholder="species" />
+        <input value={age} onChange={e => setAge(e.target.value)} placeholder="age in years" />
+        <button>Add Pet</button>
+      </fieldset>
+    </form>
+  )
+}
+function LikeArea() {
+  const [likeCount, setLikeCount] = useState(0)
+  
+  function increaseLikeHandler() {
+    setLikeCount(function(prev) {
+      return prev + 1
+    })
+  }
+  
+  function decreaseLikeHandler() {
+    setLikeCount(prev => {
+      if (prev > 0) {
+        return prev - 1
+      }
+      return 0
+    })
+  }
+  
+  return (
+    <>
+      <button onClick={increaseLikeHandler}>Increase likes</button>
+      <button onClick={decreaseLikeHandler}>Decrease likes</button>
+      <h2>This page has been liked {likeCount} times.</h2>
+    </>
+  )
+}
+
+function Pet(props) {
+  function handleDelete() {
+    props.setPets(prev => prev.filter(pet => pet.id != props.id))
+  }
+  return (
+    <li>
+      {props.name} is a {props.species} and is {props.age} years old.
+      <button onClick={handleDelete}>Delete</button>
+    </li>)
+}
+
+function Footer() {
+  return <small>Copyright Footer Text</small>
+}
+
+function TimeArea() {
+  const [theTime, setTheTime] = useState(new Date().toLocaleString())
+  
+  setTimeout(function() {
+    setTheTime(new Date().toLocaleString())
+  }, 1000)
+  
+  return <p>The current time is {theTime}.</p>
+}
+
+function OurHeader() {
+  return <h1 className="special">Our Amazing App Header</h1>
+}
+
+const root = ReactDOM.createRoot(document.querySelector("#app"))
+root.render(<OurApp />)
+----------------------
+1. What problem does react solve?
+2. Let's start using react
+3. What is JSX?
+4. Staying organized: components using other components
+5. Using props to make a components flexible
+6. Looping through an array within JSX
+7. State
+8. Handling Events 
+9. Working with Forms
+10. What is UseEffect?

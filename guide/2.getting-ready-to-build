@@ -1,0 +1,59 @@
+11. Text Editor
+12. Quick VS Code setting
+13. Node.js
+14. Setting up Workflow
+-------------------------
+11. Text Editor
+- VSC: has built in support for React and JSX
+- favorite settings and configuration tweaks and features to make use React
+    - JavaScript to JavaScript React
+    - setting, code file that defines our settings to set 
+
+{
+  "files.associations": {
+    "*.css": "scss",
+    "*.js": "javascriptreact"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.printWidth": 9999,
+  "prettier.arrowParens": "avoid",
+  "prettier.trailingComma": "none",
+  "prettier.semi": false,
+  "editor.tabSize": 2
+}
+
+--------------------------
+13. Node.js
+- in this case, we need Node to: 
+    - combine the React library with our own code that we write, as well as
+    - transpile the JSX syntax into regular JavaScript that the web browser can understand.
+
+- use Node as our own robot assistant and have it perform tasks for us automatically.
+- update the latest node: sudo n latest
+
+----------------------------
+14. Setting up Workflow
+
+- Using Node, npm to set up our workflow.
+- npm init -y: whenever I want to start a new project to create package.json file
+- install package for react: react react-dom
+- install package for work flow, automated tool to bundle up our code with our dependencies and transpile JSX into regular JavaScript file for web browser to download for user.
+  - install package to bundle file: webpack webpack-cli webpack-dev-server
+  - how to use webpack: create and configure a file: webpack.config.js
+
+  - install package to transpile JSX: @babel/core @babel/preset-env @babel/preset-react babel-loader
+  - tell webpack to start watching and bundle file and serving up our files: create custom script in package.json: "dev": "webpack serve"
+  - npm run dev
+
+- app/index.html
+- app/Main.js
+
+- instead of the web browser automatically refreshing for us when we save the React Components because we use webpack-dev-server, we can set it up so it doesn't even refresh at all. It just actually loads the new JavaScript on the fly, asynchronously.
+
+Main.js file and include below code:
+
+if (module.hot) {
+  module.hot.accept()
+}
+
+- webpack bundle the file bundled.js and keep it in the memory for performance reasons.

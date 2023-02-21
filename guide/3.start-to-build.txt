@@ -1,0 +1,141 @@
+16. Starting our social networking app
+18. Routing for Single Page Application
+20. React Developer Tools
+21. Creating a VSC Snippet
+22. Create a Reusable "Container" Component
+23. Composition
+-----------------------
+
+16. Starting our social networking app
+- prepare html template, css template, custom css
+- break html template into React Components
+Header.js
+HomeGuest.js
+Footer.js
+
+- adjust: class to className, select the "class" and Ctrl + D and using arrow key and start to change. autocomplete to autoComplete, for to htmlFor.
+-----------------------
+
+18. Routing for Single Page Application
+- How to handle links for navigating to other screens within the world of React.
+- SPA = single page application, if we clicked on this about us link down in the footer, we wouldn't just want to load a new html page because we would not want our browser to have a synchronously load a brand new url.
+
+- Instead we want to use JS to load the data for that page behind the scenes or on the fly, and then only update the parts of the screen that actually contain that new content.
+- It allows modern web applications to feel super fast and responsive.
+
+- What is front-end or client-side routing?
+    - traditionally, when you visited a different url, your browser would load an entirely new html document from the server and have to completely lock up the browser while it receives and renders that entirely new page.
+
+    - In the modern era of web applications, we use JS to load new pages or screens because JS can load the new content on the fly in the background without locking up browser.
+    - And then once the data is ready to display, JS only needs to update the specific part of the page that is necessary.
+
+    - Since we are using React, so we don't need to rely on server-side routing for navigation, we use client side routing with React Router package.
+    - React can show the appropriate content depending on the current url in the address bar.
+
+    - client-side rendering gives us the best of both worlds. It gives us the speed of JS rendering with all of the functionality of shareable and bookmarkable urls, as well as the browsers back and forward buttons.
+
+- install package: react-router-dom
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+
+- wrap the React component into 
+<BrowserRouter>
+  <Header />
+  <Routes>
+    <Route path="/" element={<HomeGuest />} />
+    <Route path="/about-us" element={<About />} />
+    <Route path="/terms" element={<Terms />} />
+  </Routes>
+</BrowserRouter>
+
+- convert traditional "a element" into link component
+import {Link} from 'react-router-dom'
+
+convert <a href="/" className="mx-1">Home</a> to:
+
+<Link to="/" className="mx-1">Home</Link>
+
+- If we send a new request url, you can see that doesn't work at all because the server doesn't have anything relevant for us at that url.
+- In order for our client-side routing to truly work, we need to set up the server to always send us index.html no matter which url we request.
+- And then it's up to our JS to display the appropriate content based on the url.
+    - adjust webpack dev server to always send index.html
+    - webpack.config.js: historyApiFallBack: {index: "index.html"}
+
+---------------------------------------------------------------------
+20. React Developer Tools
+- install google chrome extension: React Developer Tools
+- Components and Profiler Tabs when inspect the app using browser
+- It is very helpful when we starting to pass props into Component.
+
+-------------------------------
+21. Creating a VSC Snippet
+- opening the command pallete: Command Shift p
+- Type snippet to look for Preferences: configure user snippets
+- choose and open javascriptreact.json
+
+- create snippet using website: snippet-generator.app
+- copy a react snippet to pass into javascriptreact.json
+{
+  "React Component": {
+    "prefix": "rc",
+    "body": [
+      "import React, { useEffect } from \"react\"", 
+      "", 
+      "function ${1:ComponentName}() {", 
+      "  return (", 
+      "    <>", 
+      "      $2", 
+      "    </>", 
+      "  )", 
+      "}", 
+      "", 
+      "export default ${1:ComponentName}"],
+
+    "description": "React Component"
+  }
+}
+- type rc and pick it.
+
+------------------------------------------
+22. Create a Reusable "Container" Component
+- all components are reusable
+- create a reusable Container mean we're going to make it flexible and work for us in multiple different situations.
+- It would be nice if we could just wrap our content within a React Component named Container, and then depending on whether we need it to be wide or narrow, we just give it appropriate props.
+
+- how we access the content which was nested inside the Container in the about page.
+- react make this easy for us: any nested JSX content available from within {props.children}
+
+- to make the Container Component flexible we using props and ternary operator for conditional logic.
+- we wrap the HomeGuest content in the Container and give it a props wide={true}
+- function Container(props) {
+  return <div className={"container py-md-5 " + (props.wide ? "" : "container--narrow")}>{props.children}</div>
+}
+
+----------------------------------
+23. Composition: components using other components and passing props around as necessary.
+
+- quick details: title of the page
+- because we use client-side routing so the browser is not actually loading a new html document on every page switch, so we have to babysit the document title.
+
+- Within the About function Component, we want to run a bit of code the very first time this About component is rendered.
+- So we use: useEffect(bit of code we want to run, dependencies to watch for change to call bit of code)
+- To avoid the duplicate code like this for each Component because the only unique thing among the different pages would be the title.
+
+- So instead of duplicate code or using Inheritance by creating a Class, we use Composition
+    - create Page.js
+    - using back tick for dynamic and pass title as a props.
+    - the Page component will take care of the document title and scrolling, and then it's going to display the unique content inside the Container.
+
+    <Page title="About Us">
+    ...
+    </Page>
+
+- this approach of using a generic Page component saved us from a lot of unnecessary duplicate code.
+- general speaking: the more specific component will use a more generic component.
+
+------------------------
+16. Starting our social networking app
+18. Routing for Single Page Application
+20. React Developer Tools
+21. Creating a VSC Snippet
+22. Create a Reusable "Container" Component
+23. Composition
