@@ -1,28 +1,29 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import Page from "./Page";
-import Axios from "axios";
-import DispatchContext from "../DispatchContext";
-import StateContext from "../StateContext";
+import React, { useEffect, useState, useContext } from "react"
+import { useNavigate } from "react-router-dom"
+import Page from "./Page"
+import Axios from "axios"
+import DispatchContext from "../DispatchContext"
+import StateContext from "../StateContext"
 
 function CreatePost(props) {
-  const [title, setTitle] = useState();
-  const [body, setBody] = useState();
-  const navigate = useNavigate();
-  const appDispatch = useContext(DispatchContext); //app mean global
-  const appState = useContext(StateContext);
+  const [title, setTitle] = useState()
+  const [body, setBody] = useState()
+  const navigate = useNavigate() //for redirect
+  const appDispatch = useContext(DispatchContext) //app mean global
+  const appState = useContext(StateContext)
 
   async function handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault()
     try {
-      const response = await Axios.post("/create-post", { title, body, token: appState.user.token });
+      //server send back post id.
+      const response = await Axios.post("/create-post", { title, body, token: appState.user.token })
       //redirect to new post url, react router is managing the browser's history for us, useNavigate
-      navigate(`/post/${response.data}`);
+      navigate(`/post/${response.data}`)
       //add flash message
-      appDispatch({ type: "flashMessage", value: "Congrats, you created a new post." });
-      console.log("New post was created.");
+      appDispatch({ type: "flashMessage", value: "Congrats, you created a new post." })
+      console.log("New post was created.")
     } catch (e) {
-      console.log("There was a problem.");
+      console.log("There was a problem.")
     }
   }
   return (
@@ -45,7 +46,7 @@ function CreatePost(props) {
         <button className="btn btn-primary">Save New Post</button>
       </form>
     </Page>
-  );
+  )
 }
 
-export default CreatePost;
+export default CreatePost

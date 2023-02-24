@@ -1,13 +1,13 @@
-import React, { useEffect, useContext, useState } from "react";
-import Page from "./Page";
-import { useParams } from "react-router-dom";
-import Axios from "axios";
-import StateContext from "../StateContext";
-import ProfilePost from "./ProfilePost";
+import React, { useEffect, useContext, useState } from "react"
+import Page from "./Page"
+import { useParams } from "react-router-dom"
+import Axios from "axios"
+import StateContext from "../StateContext"
+import ProfilePost from "./ProfilePost"
 
 function Profile() {
-  const { username } = useParams();
-  const appState = useContext(StateContext);
+  const { username } = useParams()
+  const appState = useContext(StateContext)
   const [profileData, setProfileData] = useState({
     profileUsername: "...",
     profileAvatar: "https://gravatar.com/avatar/0df996444b997c0b17a67bffc0c8b8c2?s=128",
@@ -17,30 +17,30 @@ function Profile() {
       followerCount: "",
       followingCount: ""
     }
-  });
+  })
 
   useEffect(() => {
-    const ourRequest = Axios.CancelToken.source();
+    const ourRequest = Axios.CancelToken.source()
     async function fetchData() {
       try {
-        const response = await Axios.post(`/profile/${username}`, { token: appState.user.token }, { cancelToken: ourRequest.token });
-        setProfileData(response.data);
+        const response = await Axios.post(`/profile/${username}`, { token: appState.user.token }, { cancelToken: ourRequest.token })
+        setProfileData(response.data)
       } catch (e) {
-        console.log("There was a problem.");
+        console.log("There was a problem.")
       }
     }
-    fetchData();
+    fetchData()
     //clean up function: cancel this axios request when component is unmounted
     return () => {
       //identify the request
-      ourRequest.cancel();
-    };
-  }, []);
+      ourRequest.cancel()
+    }
+  }, [])
 
   return (
     <Page title="Profile Screen">
       <h2>
-        <img className="avatar-small" src={profileData.profileAvatar} /> {profileData.profileUsername}
+        <img alt="" className="avatar-small" src={profileData.profileAvatar} /> {profileData.profileUsername}
         <button className="btn btn-primary btn-sm ml-2">
           Follow <i className="fas fa-user-plus"></i>
         </button>
@@ -60,7 +60,7 @@ function Profile() {
 
       <ProfilePost />
     </Page>
-  );
+  )
 }
 
-export default Profile;
+export default Profile

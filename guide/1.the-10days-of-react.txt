@@ -1,3 +1,16 @@
+----------------------
+1. What problem does react solve?
+2. Let's start using react
+3. What is JSX?
+4. Staying organized: components using other components
+5. Using props to make a components flexible
+6. Looping through an array within JSX
+7. State
+8. Handling Events 
+9. Working with Forms
+10. What is UseEffect?
+---------------------------------
+
 1. What problem does react solve?
   - react is a javascript library.
   - let us keep data outside of the DOM so working with the data is simple and fast.

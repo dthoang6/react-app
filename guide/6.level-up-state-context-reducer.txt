@@ -1,0 +1,92 @@
+if we have a piece of state in our top level component. what is a more elegant way of letting children components work with that state?
+
+40. Context
+41. useReducer
+42. Context & useReducer
+43. What is Immer?
+44. Practice useEffect
+-------------------------
+40. Context: share data through out application.
+- instead of passing the props to 2, 3, 4 layer into the component, we can wrap our entire Components into one overall parent of container component and give it a value.
+- any nested component can directly consume that value no matter how many layers deep they're nested.
+
+- how to use Context:
+    - create DispatchContext.js StateContext.js
+    import { createContext } from "react";
+    const DispatchContext = createContext();
+    export default DispatchContext;
+
+    - wrap all component into DispatchContext and StateContext
+    and pass the value into the Context Provider. the value gets added to the Context Provider.
+    - So then in Child Component, we're working with the sam piece of Context, so the Child Component has access to that value (anything, a complex object with more than one properties and value...) we added to it.
+
+    - we can pass a value as an object with multiple properties: addFlashMessage, loggedIn.
+
+    - So now, we no longer receive the data as a prop, instead we can access it from context provider by:
+        - import the context provider
+        - tell which context you want to use
+
+import DispatchContext from "../DispatchContext"
+import StateContext from "../StateContext"
+
+const appDispatch = useContext(DispatchContext)
+const appState = useContext(StateContext)
+
+-------------------------
+41. useReducer: keep all of our logic in one centrally located place.
+
+- useReducer is another way of working with State in React, similar to useState
+- why and when we should use useReducer instead of useState?
+  - when we have state complex logic
+
+- compare useState vs useReducer: both return an array with two things.
+- when we use useState, the function it give us is simple, you call it and then whatever value you pass into it, will become a new state.
+
+const[loggedIn, setLoggedIn] = useState()
+
+const [state, dispatch] = useReducer()
+
+state = a piece of state to access value of state
+dispatch = something that you can use to call and update state.
+
+- we can use dispatch to perform different actions depend on the action type like:
+dispatch({type: "login"})
+dispatch({type: "logout"})
+dispatch({type: "flashMessage", value: "Congrats."})
+
+- the idea with dispatch is that you saying what action type you want to do but you are not having to tell how it actually get done.
+- ourReducer function will tell how it actually done. how the state data of our application should change for these particular actions.
+
+- whenever you call dispatch, whatever include in the parentheses will passed along into ourReducer function as the action.
+- so essentially, we're dispatching a command to make login action or we're dispatching a command to make logout action...
+
+- then we can set the value of Context Provider to dispatch to call an action to update the State. 
+- And then within any children component, we can call dispatch to perform an action you want. <DispatchContext.Provider value="dispatch"></DispatchContext.Provider>
+
+- you just say what action you want to dispatch by:
+dispatch({type: "flashMessage", value: "Congrats."})
+- or you can access the state value: state.
+
+const [state, dispatch] = useReducer(ourReducer, initialState)
+
+function ourReducer(state, action) {
+  //standard way to handle is switch
+  //how actions actually get done to babysit state.
+  ...
+}
+
+-------------------------
+42. Context & useReducer
+
+-------------------------
+43. What is Immer?
+
+-------------------------
+44. Practice useEffect
+
+-------------------------
+40. Context
+41. useReducer
+42. Context & useReducer
+43. What is Immer?
+44. Practice useEffect

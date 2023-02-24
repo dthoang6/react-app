@@ -1,0 +1,137 @@
+31. Sending a request from the frontend
+32. Access Form Field Values with React
+33. Logging In
+34. Render Different Components Depending on State
+35. Persisting State with Local storage
+36. Conditional HomePage content
+37. Create Post screen
+38. View Single Post screen
+39. Flash messages
+----------------------------------------------
+
+31. Sending a request from the frontend: HomeGuest.js
+-  when the send request or when the registration form submitted, we're going to send these values to our backend server, which is going to store in the mongodb database.
+
+- first, let's just respond to form submit event
+    - add attribute to form tag: onSubmit={handleSubmit}
+    - create a handleSubmit function to send off a network request to our backend server
+        - use Axios package to send asynchronously request
+        - use async and await
+        - use try and catch block
+
+32. Access Form Field Values with React
+- Anytime any of username, email, and password changes, we're going to store its newest value in state. When the user actually submit the registration form, we will already have these current value in state to send along with our request.
+
+- begin by creating 3 pieces of State for 3 input fields value
+- add new props to 3 input fields: onChange={e => setUsername(e.target.value)}
+
+------------------------
+33. Logging In and Log Out: HeaderLoggedOut.js HeaderLoggedIn.js
+
+- when the user submit the login form with username and password, we will send off a request to the back end, and then depending on the username and password is correct or not. The web browser will receive an appropriate response.
+
+- create HeaderLoggedOut.js HeaderLoggedIn.js and use these 2 components in Header.js
+- keeping track of latest username and password values using State and props to access the value of State and set the value of State.
+
+--------------------------------------------
+34. Render Different Components Depending on State
+- we want our application smart enough to show the correct component depending on whether you actually are logged in or out.
+- keep track a piece of log in State in Header.js component
+
+const [loggedIn, setLoggedIn] = useState()
+
+{loggedIn ? <HeaderLoggedIn /> : <HeaderLoggedOut />}
+
+- When user enter a correct username and password in HeaderLoggedOut, and then server will respond with data. We need to update LoggedIn State to true.
+
+- However, within HeaderLoggedOut, we have no way to access setLoggedIn function. We need to pass a props into HeaderLoggedOut. props.setLoggedIn(true), and a props into HeaderLoggedIn to set the loggedIn state to false if user click sign out.
+
+{loggedIn ? <HeaderLoggedIn setLoggedIn={setLoggedIn} /> : <HeaderLoggedOut setLoggedIn={setLoggedIn} />}
+
+- In future, we use Context
+---------------------------------------------
+
+35. Persisting State with Local storage
+- use the server response data and web browser's local storage so that our application will remember if we are logged in or not.
+- HeaderLoggedOut.js
+localStorage.setItem("complexappToken", state.user.token)
+localStorage.setItem("complexappUsername", state.user.username)
+localStorage.setItem("complexappAvatar", state.user.avatar
+
+- Header.js
+
+- Problem: we have to access, save, or remove the local storage all over the place: Header.js, HeaderLoggedIn.js, HeaderLoggedOut.js
+
+- most challenging aspect of learning react: How to manage and access our State though out different parts of our application or Components because we need to remember that piece of State.
+    - traditional way: lifting the state up to top level component (Main.js) so sub components or children components can pass the State down as props as necessary (Header.js...).
+
+    - using Context and Reducer: elegant way to share and pass data
+    - or using Redux: react framework to State management.
+--------------------------------
+
+36. Conditional HomePage content
+- create a Home.js Component when user login,
+- lifting the loggedIn State up to Main.js and pass it down into Component: Header, Home, HomeGuest, HeaderLoggedIn, HeaderLoggedOut
+-----------------------
+
+37. Create Post screen: CreatePost.js
+
+- work on the ability of creating a new post, so when you click the create post button (HeaderLoggedIn.js), it take you to a new screen (CreatePost.js) that lets you write a new post and save it to database.
+
+- create a Route for CreatePost.js and create the CreatePost.js
+- update the create post button in HeaderLoggedIn.js so that it navigates you to the new url: /create-post
+- add property to form: onSubmit={handleSubmit}
+- create a function handleSubmit to send off a post request and let the backend api handle
+
+- create a state and pull in the data of create-post
+
+- not type the non-unique base portion of url request: 
+http://localhost:8080/create-post
+Main.js: Axios.defaults.baseURL = "http://localhost:8080"
+
+- When user successful create a post, we want to redirect to the new url of the post with the green success message.
+--------------------------
+
+38. View Single Post screen
+- create ViewSinglePost.js
+- setup Route for ViewSinglePost Component based on post id
+
+- React router is managing the browser's history for us, and it offer a function that we can use to programmatically navigate to a new route or url
+
+import {useNavigate} from 'react-router-dom'
+
+- when user successful create a post, the server will send back to the browser the id of the newly created post.
+- then we can use the post id to fetch the data of the post.
+
+-----------------------------
+39. Flash messages
+- where should the html for flash messages live?
+- we wouldn't want the flash message html live in create post component, because when user submit the form, it will navigating away to the post.
+
+- the html for flash message should live in Main Component.
+- the logic of disappear the massage , we use css.
+
+- create FlashMessage.js component and make it dynamic by using props.
+- create a state for flash message in Main.js
+- create a function addFlashMessage to concat the message because we are working with multiple message to update the flash message state.
+- the whole point of the function is that we can pass the function into the CreatePost Component.
+
+const [flashMessage, setFlashMessage] = useState()
+
+function addFlashMessage(msg) {
+  setFlashMessage(prev => prev.concat(msg))
+}
+
+- we need a way to pass the message into different component instead of manually add the props to every single component.
+----------------------------------------------
+
+
+31. Sending a request from the frontend
+32. Access Form Field Values with React
+33. Logging In
+34. Render Different Components Depending on State
+35. Persisting State with Local storage
+36. Conditional HomePage content
+37. Create Post screen
+38. View Single Post screen
+39. Flash messages

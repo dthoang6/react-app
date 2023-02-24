@@ -1,0 +1,47 @@
+24. Choosing the right approach 
+25. Getting a Database ready
+26. Solution to Common Database problem
+27. Common misspelling
+28. Running the backend
+29. Simple Docker backend
+-------------------------
+24. Choosing the right approach
+- Simple Docker Backend approach
+- MongoDB account with backend APIs
+
+25. Getting a Database ready
+- setup a backend API or server for our front end React application to communicate with.
+- how to communicate and interact with backend?
+- how to push the back end and the front end of the application to the web?
+
+- have mongo db database account and set up a database.
+    - Create a database for react app
+    - Connect button to connect to cluster 0 by letting any user: Add a different ip address: 0.0.0.0/0
+    - Create a mongodb user: username = mainUser and password
+
+    - choose a connection method/connect your application.
+          - choose your driver version: node.js
+          - add connection string
+          mongodb+srv://tom:<password>@cluster0.oiphnxa.mongodb.net/?retryWrites=true&w=majority
+
+          mongodb+srv://tom:Coca14@cluster0.oiphnxa.mongodb.net/ReactCourse?retryWrites=true&w=majority
+
+26. Solution to Common Database problem
+27. Common misspelling
+
+28. Running the backend
+- step1: download backend api, open the backend api folder in vscode, or build my own backend api, or use free backend api.
+- step2: create .env file with 3 environment variables
+- step3: cmd: npm install, npm run start
+
+29. Simple Docker backend
+- docker-compose.yml
+- only for local development
+
+-------------------------
+24. Choosing the right approach 
+25. Getting a Database ready
+26. Solution to Common Database problem
+27. Common misspelling
+28. Running the backend
+29. Simple Docker backend

@@ -31,6 +31,7 @@ function Main() {
   }
   //only working with state
   function ourReducer(draft, action) {
+    //action and how state should change.
     switch (action.type) {
       case "login":
         draft.loggedIn = true
@@ -45,7 +46,8 @@ function Main() {
     }
   }
 
-  const [state, dispatch] = useImmerReducer(ourReducer, initialState) //change from react native useReducer to useimmerReducer
+  //destructuring the return array to access to it and pass it in DispatchContext and StateContext.
+  const [state, dispatch] = useImmerReducer(ourReducer, initialState) //change from useReducer to useimmerReducer
 
   //localStorage --> useEffect(a,b) a is a function, b is a list or an array of dependencies that you want to watch for changes. Any time it changes, the function a will run.
   useEffect(() => {

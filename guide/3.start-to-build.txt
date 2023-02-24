@@ -125,7 +125,7 @@ convert <a href="/" className="mx-1">Home</a> to:
     - using back tick for dynamic and pass title as a props.
     - the Page component will take care of the document title and scrolling, and then it's going to display the unique content inside the Container.
 
-    <Page title="About Us">
+    <Page title="Welcome" wide={true}>
     ...
     </Page>
 
@@ -136,6 +136,6 @@ convert <a href="/" className="mx-1">Home</a> to:
 16. Starting our social networking app
 18. Routing for Single Page Application
 20. React Developer Tools
-21. Creating a VSC Snippet
+21. Creating a VSC Snippet: rc
 22. Create a Reusable "Container" Component
 23. Composition
