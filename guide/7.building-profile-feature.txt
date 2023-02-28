@@ -1,0 +1,95 @@
+45. Profile Screen
+46. Load Posts By author
+47. Make Single Post Screen Actually Load the Real Content
+48. Animated Loading icon
+49. Cleaning up - useEffect
+50. Markdown in React
+
+---------------------------
+
+45. Profile Screen
+- create new component: Profile.js
+- set up new route for: path="/profile/:username/*"
+- * is when we add the sub routes of /follower, /following this overall route still be user.
+
+- adjust the a link for profile photo in HeaderLoggedIn.js
+
+- use Axios to send a request to server to retrieve the data about the user.
+- useParams is short for the parameters from the url or path.
+
+const {username} = useParams()
+- the reason we have our variable name wrapped in {} because this is going to return an object that could potentially have many different properties like in complex app you would have other segments of the url as well: /profile/brad/learn/.
+- so essentially, we destructuring the object it gives us, and we are only interested in the username property.
+- so we can have username variable to use Axios request to set it off to the back end.
+
+- we need to send request using useEffect to only send it when needing. Otherwise, react is going to execute this function anytime any of its props from a parent component changes and we really don't wanna be sending off new network requests with Axios every time that happens.
+
+- when the Profile component is first rendered, we don't have any of user data, we need initial render placeholder values for user data: using useState with placeholder value object for user object of the server send back.
+- and the request to the server will be running in the background, and once it completes then react can just show the actual values by set the value the State.
+
+------------------------
+
+46. Load Posts By author
+- create a ProfilePost.js component
+- we are going to set up client side navigation so that when you click on followers or click on following, that would swap out or switch the content.
+
+- working on sending a request to the back end to actually load posts by this user.
+- when you first come to this page and the component is rendered the actual raw data for these posts will still be isLoading = true.
+
+- whenever we send Axios request, and when it completes we can set isLoading to false.
+- we only want to run the send request when the this component first renders by using useEffect.
+
+- create a piece of state to store the posts
+- adjust the ProfilePost.js from fake hard code to real data from the server which we save to post State.
+
+--------------------------------
+47. Make Single Post Screen Actually Load the Real Content
+- loading real data for ViewSinglePost.js when user click on post link from Profile.js
+- we use Axios to send request to the server and while isLoading is true, we render LoadingDotsIcon component.
+- when we actually get the response from the server, isLoading is false, we render the actual ViewSinglePost Component with response data.
+
+48. Animated Loading icon
+- create LoadingDotsIcon.js
+- component will return a css animation
+
+-------------------------------
+49. Cleaning up - useEffect
+- if you navigate to a post, but then immediately click back to the homepage before the Axios request and loading icon actually completes. It will generate an error.
+
+- the problem is that you can't update the state for a component that is no longer mounted or being rendered to the screen.
+
+- so we can clean up by return an function, so that the function wil run when the component is unmounted or when it stops being rendered.
+- so in the clean up function, we want to cancel the Axios request.
+
+- cleaning up is not limited to just asynchronous network request. The idea is that when a component is no longer being used, you want to clean up after yourself.
+- for example: a component might add keyboard bindings to listen for a certain key being pressed. or full screen search overlay.
+- you'd want to bind an action to then the user presses the escape key to close that full screen modal then once that component is no longer being rendered you'd want to remove that keyboard event listener.
+
+- how to cancel axios request?
+    - when we create the axios request we need a way to identify it so that we can access it later on to cancel it.
+    - we give it a cancel token.
+    - and send it along to the axios request to cancel the request if component is unmounted
+
+- The point is that we're no longer trying to update state for a component that's no longer even mounted.
+
+- we need to cleanup in Profile.js, ProfilePost.js
+-------------------------------
+50. Markdown in React
+- How we can support different types of text formatting within the actual body content of a post.
+- we need to parse the content as Markdown on the client side, or on the web browser side instead of the server side.
+
+- we're using react and client side routing.
+- install package: react-markdown
+- import ReactMarkdown into ViewSinglePost
+- and then leverage it for post.body
+
+---------------------------
+
+45. Profile Screen
+46. Load Posts By author
+47. Make Single Post Screen Actually Load the Real Content
+48. Animated Loading icon
+49. Cleaning up - useEffect
+50. Markdown in React
+
+---------------------------

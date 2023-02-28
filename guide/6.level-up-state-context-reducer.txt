@@ -74,15 +74,59 @@ function ourReducer(state, action) {
   //how actions actually get done to babysit state.
   ...
 }
+----
+What is userReducer really doing?
+const [state, dispatch] = useReducer(ourReducer, initialState)
+
+- when we call useReducer, we give it our initial State, and then we give it a function ourReducer. And in return it give us 2 things. We chose to name those 2 things: state and dispatch to power our entire application by using Context to pass in Component, the overall State object and dispatch. Just those 2 things can allow a potentially infinite number of different actions and different changes to state.
+
 
 -------------------------
 42. Context & useReducer
+- we can start to using ourReducer function by dispatching actions from within any component in our application.
+
+- some component only need access to our global state.
+- some component only need access only to dispatch. So we would not want those component unnecessary re rendering every time global state changes.
+
+- so we set up by simply have two context provider. one for state, one for dispatch.
+- that way, it can be up to each individual component to decide which context they want to consume and watch for changes.
 
 -------------------------
-43. What is Immer?
+43. What is Immer? sort of sidestep the issue of having to avoid directly mutating state
+
+- we never want to directly mutate or change our state.
+- instead, you give react a new value or a new object, and it handles updating your app's state.
+- as you begin working with more complex objects, it becomes more work to write code in an immutable fashion.
+- we use the package Immer to makes it super easy to work with complex object in an immutable fashion.
+
+- in react, you need to return a new object, you can't directly modify or mutate the existing state object.
+
+return {loggedIn: true, flashMessage: state.flashMessage,...}
+
+- imagine if you had 40 properties, if you only want to update one of the property, you don't need to type all the other 39 properties again if using Immer.
+      - just change the thing we want to change
+      - Immer will give us a draft where we are free to directly modify and mutate that draft.
+
+      - what immer does, it gives us a copy of state, that we are free to modify and change however we want.
+      - and then immer will automatically handle the task of giving that draft object back to React.
 
 -------------------------
 44. Practice useEffect
+- working with the same piece of data in many different locations is the number one cause of bugs and unexpected problems.
+- our goal is that all of our loading and saving from local storage takes place only within our Main.js file.
+
+- the idea here is that we have the user object be available in global app as initialState, so any other component that needs to access this data will no longer need to talk the browser localStorage.
+
+- how should these user values get set into localStorage when user login.
+    - when user login using HeaderLoggedOut.js, we can send the server response back to ourReducer through our appDispatch.
+
+  appDispatch({type: "login", data: response.data})
+
+  - in ourReducer function we can say: draft.user = action.data if action type is login.
+
+  - we want to keep ouReducer working with only state.
+
+  - if we need to do something that's considered a side effect like directly changing the browser's dom or in this case working with local storage. we should do it within useEffect.
 
 -------------------------
 40. Context

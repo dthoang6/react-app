@@ -29,7 +29,7 @@ function Main() {
       avatar: localStorage.getItem("complexappAvatar")
     }
   }
-  //only working with state
+  //only working with business logic
   function ourReducer(draft, action) {
     //action and how state should change.
     switch (action.type) {

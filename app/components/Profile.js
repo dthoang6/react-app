@@ -9,8 +9,9 @@ function Profile() {
   const { username } = useParams()
   const appState = useContext(StateContext)
   const [profileData, setProfileData] = useState({
+    //this data will be immediately available when first render before the data from server is available.
     profileUsername: "...",
-    profileAvatar: "https://gravatar.com/avatar/0df996444b997c0b17a67bffc0c8b8c2?s=128",
+    profileAvatar: "https://gravatar.com/avatar/placeholder?s=128",
     isFollowing: false,
     counts: {
       postCount: "",
