@@ -1,0 +1,101 @@
+51. Adding Tooltips on Hover for actions
+52. Edit Post Component
+54. Client Side Form Validation
+55. Attention to Detail feature
+56. Delete a Post
+--------------------------------
+51. Adding Tooltips on Hover for actions
+- add tooltips or labels over those icons when you hover on them to let you know what the button does.
+
+- React ecosystem is full of all sorts of plugins or packages as pre-existing components, so we just need to install the package to use those pre-existing component.
+
+- install package: react-tooltip
+data-tip="Edit" data-for="edit"
+<ReactTooltip id="edit" className="custom-tooltip" />
+
+- in react when elements sit on different lines, react does not add in any white space when it renders the html to the browser.
+
+- include this {" "}
+
+--------------------
+52. Edit Post Component
+- create EditPost.js
+- import EditPost component in Main.js
+- set up new route for EditPost Component
+
+- update a and href in ViewSinglePost when user click edit button to: Link, to
+
+- to make a link dynamic we use: backtick, and ${..}
+- the return jsx is similar to the create-post component
+- we just need to pull the title, and body of the post we want to edit
+
+- we want to set up our edit-post a bit differently from when we setup our create-post.
+- we want to set thing up in a more robust fashion so that we can add client side validation to this edit form.
+
+- we are going to set things up so that we use a reducer and a dispatch. Then the state that our reducer manages is what we want to send to the server when user try to submit the update.
+
+- think about the data that we're loading when a page loads: 2 axios request
+- the first request is like a read only request, just pull in the existing title and body values for edit post from the server response and them to state.
+
+- add onChange when user edit, instead of using
+onChange={e => setTitle(e.target.value)}
+
+- we use:
+onChange={(e) => dispatch({type: "titleChange", value: e.target.value})}
+
+- when user click save update, send a request to update the post in database, and redirect the post to new update post.
+- make the button gray, so that user can't click on it again
+-  once it does finish update, the button become enabled again: use case "saveRequestStarted" "saveRequestFinished"
+- show the flash message: use appDispatch
+
+-------------------------------
+54. Client Side Form Validation
+- add client side validation for edit post form for user experience
+- a user could see a message appear in real time associated with the field.
+
+- first add the actual red error message
+- add this <div className="alert alert-danger small liveValidateMessage" >Example message</div>
+
+- write a logic when user blur off of a field, or when user try to submit the form, we would want to check our logic to make sure that a field is not empty.
+  - setup onBlur event listener to send a dispatch, set up a logic in ourReducer.
+
+- pay attention when the user tries to submit the form because we'd only want to send off an Axios request if our form doesn't contain any errors.
+  - we already has a case name "submitRequest"
+  - so we would only want to increment or change it if we don't contain any errors.
+  - because when sendCount changes, it is going to trigger the axios request to actually to be sent to the server.
+  - need to encounter with the blur and with the submitHandler so that we will call the logic for case "titleRules" when the field is blur or the form is submit.
+
+-------------------------------
+55. Attention to Detail feature
+- what if you are not the owner or author of the post for the url of the post you want to edit?
+  -
+
+
+- what happens if you visit a url for a post id that doesn't exist?
+  - add one more property: notFound: false
+- add the link to go back to just viewing a post instead of editing it
+
+- add NotFound component when user enter wrong url for: ViewSinglePost, EditPost, 
+
+- in Main.js add a Route to handle NotFound: the ideas is if a url matches the url pattern to view a post or to edit post then it's up to these components to handle showing not found.
+
+- but if its just a top level url that can't be found, add a Route in Main.js to handle it.
+
+
+--------------------------------
+56. Delete a Post
+- letting a user delete one of their post
+- first, focus on only displaying the edit and delete buttons here if user are the owner of the post.
+    - ViewSinglePost: work on conditional display the edit and delete icon: {isOwner() && (display edit and delete icon)}
+
+- show a confirmation window that says "Do you really want to delete this post?" add onClick props
+
+- sending a delete request to the backend server
+onClick={deleteHandler}
+--------------------------------
+51. Adding Tooltips on Hover for actions
+52. Edit Post Component
+54. Client Side Form Validation
+55. Attention to Detail feature
+56. Delete a Post
+--------------------------------
