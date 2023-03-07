@@ -58,6 +58,7 @@ onChange={(e) => dispatch({type: "titleChange", value: e.target.value})}
 
 - write a logic when user blur off of a field, or when user try to submit the form, we would want to check our logic to make sure that a field is not empty.
   - setup onBlur event listener to send a dispatch, set up a logic in ourReducer.
+  onBlur={e => dispatch({ type: "titleRules", value: e.target.value })}
 
 - pay attention when the user tries to submit the form because we'd only want to send off an Axios request if our form doesn't contain any errors.
   - we already has a case name "submitRequest"
@@ -88,10 +89,11 @@ onChange={(e) => dispatch({type: "titleChange", value: e.target.value})}
 - first, focus on only displaying the edit and delete buttons here if user are the owner of the post.
     - ViewSinglePost: work on conditional display the edit and delete icon: {isOwner() && (display edit and delete icon)}
 
-- show a confirmation window that says "Do you really want to delete this post?" add onClick props
+- show a confirmation window that says "Do you really want to delete this post?" add onClick props in ViewSinglePost.js
 
 - sending a delete request to the backend server
 onClick={deleteHandler}
+
 --------------------------------
 51. Adding Tooltips on Hover for actions
 52. Edit Post Component

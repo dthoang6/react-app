@@ -1,0 +1,93 @@
+57. Setting up search overlay
+58. React Transition group - css transition
+59. Regarding the index
+60. Waiting for user to stop typing
+61. Finishing Search
+-----------------------------------
+
+57. Setting up search overlay
+- create Search.js with html template
+- import Search component into Main.js
+
+- when user click search icon at HeaderLoggedIn, show the Search overlay
+- if user click the x icon, close the Search overlay
+
+- how to display the search overlay conditionally
+- create a new property "isSearchOpen" in main.js and 2 cases for our reducer logic: openSearch, closeSearch.
+
+{state.isSearchOpen ? <Search /> : ""}
+
+
+- use context, state, dispatcher, ourReducer, we can easily manage the state from within any of our component.
+
+- we set thing up in the HeaderLoggedIn.js so that when user click the search icon, we use appDispatch to send off an action of "openSearch".
+    - onClick={handleSearchIcon}
+    - function handleSearchIcon(e) {....send appDispatch(...)}
+
+- we set thing up in the Search.js so that when user click the X icon, we use appDispatch to send off an action of "closeSearch".
+    - onClick={handleCloseIcon}
+    - function handleCloseIcon(e) {....send appDispatch(...)} 
+
+    or we can use inline function:
+    onClick={() => appDispatch({type: "closeSearch"})}
+
+    we can also close search overlay using esc keyboard using useEffect to run this code the first time this component is rendered by adding a keyboard listener event to the browser.
+
+    we need to return a clean up function: when this component is unmounted or removed from the screen. Meaning if someone opens the search and then closes it. We wouldn't want to keep listening for that keyboard press.
+----------------------------------------------------
+
+58. React Transition group - css transition
+- using css transition can be a bit tricky because the millisecond we close it, React just removes it from the DOM and you can't exactly animate an element that doesn't even exist in the DOM any longer.
+- package: react-transition-group to get around css transition dom
+
+- in main.js we leverage the package by
+<CSSTransition timeout={330} in={state.isSearchOpen} classNames="search-overlay" unmountOnExit >
+    <Search />
+</CSSTransition>
+
+- we don't want our search component to be invisible or hidden by css, we want it to completely remove from the DOM.
+
+--------------------------------------
+59. Regarding the index: create an index 
+60. Waiting for user to stop typing
+- working on fetching and display search results on the fly
+
+- begin by setting up the different pieces of data that we would want to store in state.
+  - approach 1: useState
+  - approach 2: useReducer, useImmerReducer
+  - approach 3: useImmer, sort of middle ground in between those two approachs, similar to reacts own use state.
+   - we can have multiple properties in one object instead of having five different useState, and then immer makes it very easy to update ust one of those properties in an immutable fashion.
+
+  const [state, setState] = useImmer({
+    searchTerm: "",
+    //fetch JSON data from server and the posts that match the search term will live in this results property.
+    results: [],
+    //at appropriate time, we can set this to either be loading icon or results.
+    show: "neither",
+    requestCount: 0
+  })
+
+- add an onChange prop to the input field: onChange={handleInput}
+ - we want to handle the search input delay using useEffect
+ - send axios request by using useEffect
+
+- using ternary operator to add a class to make the loading visible
+<div className={"circle-loader" + (state.show == "loading" ? "circle-loader--visible" : "")}></div>
+
+<div className={"live-search-results" + (state.show == "results" ? "live-search-results--visible" : "")}>
+
+- at the appropriate time, we setState.show to loading or results, or neither
+------------------------------------
+61. Finishing Search
+-
+
+
+
+-----------------------------------
+
+57. Setting up search overlay
+58. React Transition group - css transition
+59. Regarding the index
+60. Waiting for user to stop typing
+61. Finishing Search
+-----------------------------------

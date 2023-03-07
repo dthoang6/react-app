@@ -18,6 +18,7 @@ function ViewSinglePost() {
   const [isLoading, setIsLoading] = useState(true)
   const [post, setPost] = useState([])
 
+  //fetch a new post
   useEffect(() => {
     const ourRequest = Axios.CancelToken.source()
     async function fetchPost() {
@@ -35,7 +36,7 @@ function ViewSinglePost() {
       //identify the request
       ourRequest.cancel()
     }
-  }, [])
+  }, [id])
 
   if (!isLoading && !post) {
     return <NotFound />
@@ -100,7 +101,7 @@ function ViewSinglePost() {
       </p>
 
       <div className="body-content">
-        <ReactMarkdown children={post.body} allowedElements={("p", "br", "strong", "em", "h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol", "li")} />
+        <ReactMarkdown children={post.body} allowedElements={["p", "br", "strong", "em", "h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol", "li"]} />
       </div>
     </Page>
   )
