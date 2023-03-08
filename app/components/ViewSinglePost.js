@@ -31,11 +31,7 @@ function ViewSinglePost() {
       }
     }
     fetchPost()
-    //clean up function: cancel this axios request when component is unmounted
-    return () => {
-      //identify the request
-      ourRequest.cancel()
-    }
+    return () => ourRequest.cancel()
   }, [id])
 
   if (!isLoading && !post) {

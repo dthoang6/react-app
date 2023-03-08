@@ -79,10 +79,25 @@
 - at the appropriate time, we setState.show to loading or results, or neither
 ------------------------------------
 61. Finishing Search
--
+- when user click the search results, it will automated close the search result.
 
+<Link onClick={() => appDispatch({ type: "closeSearch" })} ...>
+</Link>
 
+- in ViewSinglePost we need to update the dependencies array for the useEffect to run the new Axios request to fetch a new post.
 
+- If user search for something that has zero results? show a red box that reads no search results match that query or something along those lines.
+    - wrap entire search results into conditional logic to show if there is more than 1 results for search.
+    
+            {Boolean(state.results.length) && (
+
+            )}
+
+            //otherwise
+            {!Boolean(state.results.length) && (
+
+            )}
+            
 -----------------------------------
 
 57. Setting up search overlay

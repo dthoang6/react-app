@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
 import Axios from "axios"
 import LoadingDotsIcon from "./LoadingDotsIcon"
-import Post from "./Post"
 
-function ProfilePost() {
-  const { username } = useParams() //dynamic variable
-  //keep track if loading or not. as long as this is true we show an animated loading icon. otherwise, show the real content.
+function ProfileFollower() {
+  const { username } = useParams()
   const [isLoading, setIsLoading] = useState(true)
   const [posts, setPosts] = useState([])
 
@@ -14,7 +12,7 @@ function ProfilePost() {
     const ourRequest = Axios.CancelToken.source()
     async function fetchPosts() {
       try {
-        const response = await Axios.get(`/profile/${username}/posts`, { cancelToken: ourRequest.token })
+        const response = await Axios.get(`/profile/${username}/followers`, { cancelToken: ourRequest.token })
         setPosts(response.data)
         setIsLoading(false)
       } catch (e) {
@@ -22,11 +20,7 @@ function ProfilePost() {
       }
     }
     fetchPosts()
-    //clean up function: cancel this axios request when component is unmounted
-    return () => {
-      //identify the request
-      ourRequest.cancel()
-    }
+    return () => ourRequest.cancel()
   }, [username])
 
   if (isLoading) {
@@ -34,11 +28,16 @@ function ProfilePost() {
   }
   return (
     <div className="list-group">
-      {posts.map(post => {
-        return <Post noAuthor={true} post={post} key={post._id} />
+      {posts.map((follower, index) => {
+        return (
+          <Link key={index} to={`/profile/${follower.username}`} className="list-group-item list-group-item-action">
+            <img alt="" className="avatar-tiny" src={follower.avatar} />
+            {follower.username}
+          </Link>
+        )
       })}
     </div>
   )
 }
 
-export default ProfilePost
+export default ProfileFollower

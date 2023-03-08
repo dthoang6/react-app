@@ -1,0 +1,97 @@
+63. Follow user feature
+64. Profile followers and following tab
+65. Homepage post feed.
+
+-----------------------
+
+63. Follow user feature
+
+- Profile.js
+- 1. thinking about the state that this component will need
+    - want to keep track of a few different properties in the state: followActionLoading, startFollowingRequestCount,
+    stopFollowingRequestCount.
+    - we use useImmer instead of useState
+
+- 2. working with the logic of following
+  - If you're visiting your own profile, you shouldn't be allowed to follow yourself
+
+  appState.user.username != state.profileData.profileUsername
+
+  - If you're already following a user, you shouldn't see a Follow button, instead seeing Stop Following button.
+
+  !state.profileData.isFollowing
+
+  - If you're viewing a profile, but you're not even logged into the app at all, you can not see the Follow button: 
+  
+  appState.loggedIn
+
+  - if the profile component is still loading, don't display the button
+
+- 3. what should happen when you do click on the Follow button?
+    - on the opening button tag, give it an onClick prop with startFollowing function:
+
+    onClick={startFollowing}
+
+    - wen want to make the button appear grayed out and unclickable so would want it to look that way while our Axios request that's communicating with the server run in the background.
+
+    - create a startFollowing function and setup the useEffect to watch the change of property startFollowingRequestCount to run the axios request if it is greater than 0
+
+    - send the post request to url: /addFollow/${} and using setState to perform action.
+
+- 4. starting to work for Stop Following button which is opposite to Following button step 1 to step 3.
+
+
+------------------------
+64. Profile followers and following tab
+
+- set up a secondary switch within our Profile like this opens up a lot of possibilities for unique and powerful layouts.
+
+- how to make the followers and following tab appear when user click the tab?
+- we would want to switch out different components and adjust which one of these tabs visually appears active.
+
+- it's not just quite as simple as displaying new content here because we want to set things up so that each screen has a shareable url:
+
+/profile/brad/followers
+/profile/brad/following
+
+  - import NavLink of react-router-dom. It is similar to the Link Component and it will add an active or selected class to the matching link.
+  - It going to give one of these tabs the visual appearance that it's selected or highlighted.
+  - the react-router-dom package can tell which one is active based on the current path or route.
+  - setup: <NavLink to="followers"></NavLink>
+
+- what should be rendered to the screen when user visit these paths?
+    - Using Routes, Route for mini switch
+    - Create ProfileFollower.js, ProfileFollowing.js
+
+- Extra credit:
+  - Create a generic component for ProfileFollow and send a props action ="follower" or action="following"
+
+  - take care of these screens that have zero results: If you're viewing someone else's profile and following is zero, you could set yo a message here that says "This user is not following anyone yet." Or "This user doesn't have any followers"
+
+  - Or if you were viewing your own profile, and you have zero followers, this screen could say "You don't have any followers yet"
+
+  - or if you were not even logged in, it could say "you should register for an account"
+------------------------
+65. Homepage post feed.
+
+- if your're logged in, the homepage should display the latest posts from the users or people you follow.
+- begin by setup the state useImmer with initial state
+- next, setup a useEffect that runs the first time this component renders that performs an Axios request to fetch the posts.
+
+- setup a bit of JSX to render the home feed.
+    - show the loading icon
+    - {condition && (JSX content)}
+
+- setup common code for organization
+  - we have identical code in Home.js, ProfilePost.js, Search.js
+  - so we can create a Post Component for identical code and give it unique data with props to make our Post generic one size fits all post component.
+
+  - the reason we're doing this is so if in the future we ever needed to change the formatting for a list post, we'd only need to change it in one centralized location.
+
+-----------------------
+
+63. Follow user feature
+64. Profile followers and following tab
+65. Homepage post feed.
+
+-----------------------
