@@ -1,0 +1,123 @@
+66. live chat user interface
+67. sending and receiving chats
+68. finishing chat
+
+-----------------------------
+66. live chat user interface
+
+- html user interface
+- create chat.js with html file with some adjustment
+- import chat to main.js and render Chat
+---------------------------------------
+- setup so that chat is not visible by default, by set up a condition to add a className
+
+<div id="chat-wrapper" className={"chat-wrapper shadow border-top border-left border-right " + (appState.isChatOpen ? "chat-wrapper--is-visible" : "")}>
+-------
+- when user click chat in HeaderLoggedIn, show Chat Window
+
+onClick = {() => appDispatch({type: "toggleChat"})}
+
+- when user click X in Chat, close Chat Window
+
+onClick={() => appDispatch({ type: "closeChat" })} 
+
+- if the chat is opened, when user click the chat in HeaderLoggedIn, close it.
+----
+
+- we do it by keep a piece of state in our main component that says whether the chat should be open or not.
+- and then we add 2 cases in our reducer to change the state
+- that way, we can leverage context and our dispatch in order to change that state from both header and chat component.
+
+- we didn't use the CSS Transition to handle the showing and hiding the chat because we don't want to actually unmount or remove the chat component from the DOM when it's hidden.
+
+- before we even click to visually see the chat component, we want the chat to connect to a chat server in the background.
+--------
+- set up a useEffect to watches the piece of state that says whether the chat is open or not so we can autoFocus into the chat field
+- we can not use the props autofocus like Search because our Chat Component is not added or removed to the DOM.
+
+- How can we focus that input field?
+    - the entire idea behind React and JSX is that you are declaratively spelling out your interface.
+    - and you set it up in a way so that it reacts to your state or data or prop changes.
+    - and that's means 99% of the time, there's no need to imperatively focus an element and tell it what to do.
+
+    - in this case, we need to imperatively focus this element!
+    - and in rare situations, it is definitely necessary.
+    - we use a hook: useRef instead of the old way document.querySelector
+
+    const chatField = useRef(null)
+    ref={chatField} add a props ref to input element
+    chatField.current.focus()
+
+---------------------------------------
+67. sending and receiving chats
+
+- have the latest input field and store this value in state: set up an onChange handler
+
+- when user submit it, handle that event with React: set up a submit handler
+
+function handleSubmit(e) {
+    e.preventDefault()
+    // send message to chat server
+
+    setState(draft => {
+      // add message to state collection of messages
+      draft.chatMessages.push({ message: draft.fieldValue, username: appState.user.username, avatar: appState.user.avatar })
+      draft.fieldValue = ""
+    })
+  }
+
+- store all the messages in state: chatMessages
+- then just loop through them in the chat @ the JSX
+
+{state.chatMessages.map((message, index) => {
+...
+})}
+
+- that way, anytime that collection of messages change, it will automatically be re-rendered
+
+-------
+- connect to the chat server and send message to the server in addition to just sending them to our own state
+    - open up a socket connection between the browser and a server.
+    - using a tool name socket.io-client to set up the frontend
+- then, the server can broadcast those messages to any and all other connected users
+
+- listen for the server sending us a message that originated from any of the other users
+    - we would only want to begin listening for an event named "chatFromServer" just like our servers listening for an event named "chatFromBrowser"
+    - we need to use useEffect
+
+- then push the messages the server gives us on to our array of messages in state
+- then our logic in JSX would already know to display the messages
+
+-------------------------------
+
+
+68. finishing chat
+
+- working on a count in chat icon to shows how many unread chat messages you have.
+      - thinking about the state that's going to drive this feature and then we can work backwards from there.
+
+      - if we think about it, the piece of state that holds that number of how many unread messages you have we wouldn't want that to live in the chat component because we want to access it from Header component.
+
+      - when would be the precisely right moment to increment the unseen message count by one? or clear the chat count feature?
+
+      - update the JSX to show the UI of chat count: using ternary condition
+        - if there is unread message, make the chat icon red.
+        - display it with a count of unread message
+
+- link to profile 
+<Link to={`/profile/${message.username}`}>
+    <img className="avatar-tiny" src={message.avatar} />
+</Link>
+
+- scroll vertically automatically: find the div that has the scroll bar in our jsx and give it a ref={chatLog} so we can reference it imperatively.
+
+  - we is going to use useEffect to watch the array of message for changes and run an imperatively code to scroll top automated.
+
+
+-----------------------------
+
+66. live chat user interface
+67. sending and receiving chats
+68. finishing chat
+
+-----------------------------

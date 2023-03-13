@@ -75,7 +75,8 @@
 65. Homepage post feed.
 
 - if your're logged in, the homepage should display the latest posts from the users or people you follow.
-- begin by setup the state useImmer with initial state
+
+- Home.js: begin by setup the state useImmer with initial state
 - next, setup a useEffect that runs the first time this component renders that performs an Axios request to fetch the posts.
 
 - setup a bit of JSX to render the home feed.
