@@ -1,0 +1,63 @@
+70. improving registration form
+71. finishing registration form
+75. proactively check if token has expired
+-------------------------------
+
+70. improving registration form
+
+- add real time or client side validation to our user registration form.
+- to improve user experience
+
+- instead of using useState we use useImmerReducer to deal with complex object.
+
+
+- start by defining our initial state
+- work with ourReducer function switch cases (7 cases) based on action.type
+
+- on the username element, we would add an onChange event of onChange prop and we would just dispatch that username immediately with the latest value from this field.
+
+- and then we could check for basic things in that case, such as for if characters that are not alpha numeric or if the length is over 30 characters
+
+onChange={e => dispatch({type: "usernameImmediately", value: e.target.value})}
+
+- display a red warning div if there is errors message: want to animate or transition or fade the red warning box into view gradually
+- using CSSTransition package
+- the div only exist if the value fo username has an errors
+-------------------------------
+71. finishing registration form
+
+- working on a delay timer where we wait for the user to stop typing before running the logic
+    - how to setup the delay
+    - setup a useEffect where we watch username.value for changes
+
+- if the username has no errors, we will use useEffect to watch the username.checkCount to send off an Axios request
+- then we handle if the server send back data in ourReducer case
+
+- work with email and password validation
+    - if the string of test does not match the basic pattern for an email
+    - if the email has no errors, send an axios request to check for unique
+
+
+- set up thing if you left the fields blank but tried to submit the form. Before we actually send a request to the back end, we would want to trigger and run all of our validation rules.
+- we want to make sure that all the values is checked before we even bother our server by call the dispatch for all the rule in function handleSubmit
+
+- we don't bother checking is unique for username and email if you're just submitting the form instead of actually typing in the field
+  - including condition for !action.noRequest
+
+- bug: cannot submit to register: fix bug with condition if
+
+------------------------
+75. proactively check if token has expired
+
+- when you first load up the application, assuming you're logged in, we would wanna check to make sure that your token is still valid, that your token hasn't expired.
+
+- if your token has expired, we would want to log out automatically and force the user to log back in.
+
+- in main.js, set up a useEffect that will run on the initial render
+
+-------------------------------
+
+70. improving registration form
+71. finishing registration form
+75. proactively check if token has expired
+-------------------------------
