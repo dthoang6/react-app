@@ -4,9 +4,11 @@ import StateContext from "../StateContext"
 import DispatchContext from "../DispatchContext"
 import { useImmer } from "use-immer"
 import io from "socket.io-client"
-const socket = io("http://localhost:8080") //establish an ongoing connection between the browser and our backend server.
 
 function Chat() {
+  //using ref instead of state because we don't want react to recreate this variable or micromanage it. We want a basic mutable object that's not going to change so that the web browser can consistently hold onto the socket connection.
+  const socket = useRef(null)
+
   const appState = useContext(StateContext)
   const appDispatch = useContext(DispatchContext)
   //a references is like a box that we can hold value in and free to directly mutate it. React will not re-render things when your reference changes. Now we add a props ref={chatField} to the input element to imperatively to do something.
@@ -30,11 +32,16 @@ function Chat() {
 
   //listen for server send us a message
   useEffect(() => {
-    socket.on("chatFromServer", message => {
+    //no matter how many times you log out or log back in, we are ending the socket connection and then reopening it at the appropriates times.
+    socket.current = io("http://localhost:8080")
+
+    socket.current.on("chatFromServer", message => {
       setState(draft => {
         draft.chatMessages.push(message)
       })
     })
+
+    return () => socket.current.disconnect()
   }, []) //only run the first time it is rendered
 
   useEffect(() => {
@@ -58,7 +65,7 @@ function Chat() {
   function handleSubmit(e) {
     e.preventDefault()
     // send message to chat server
-    socket.emit("chatFromBrowser", { message: state.fieldValue, token: appState.user.token })
+    socket.current.emit("chatFromBrowser", { message: state.fieldValue, token: appState.user.token })
 
     setState(draft => {
       // add message to state collection of messages

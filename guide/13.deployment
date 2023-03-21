@@ -1,0 +1,91 @@
+Getting ready to go live
+--------------------------
+76. React Suspense for lazy loading
+79. building a "Dist" copy of our side
+80. react outside of the browser
+83. Pushing our api backend server up to the web
+84. Pushing our react frontend up to the web
+
+
+-----------------------
+76. React Suspense for lazy loading
+
+- how to lazy loading our components with suspense?
+
+- It doesn't make sense for our visitors to have to download just one single large JS file if they might not even use all of the features inside of it.
+
+- we can set things up so that the visitors of our site only have to download the components and code that they actually need to view the features they're using in that moment.
+
+- lazy loading is not loading something until it's actually needed.
+- react suspense is the tool in the official core of react to make lazy loading very easy to implement.
+
+- instead of: import CreatePost from "./components/CreatePost"
+- we use:
+const CreatePost = React.lazy(() => import("./components/CreatePost"))
+- wrap a suspense with a fallback prop around each lazy loaded component
+
+<Suspense fallback={<LoadingDotsIcon />}
+....lazy loading components
+<Suspense />
+
+- when our app first loads, this is not going to contain the contents of that component because this really just contains a promise.
+
+- big picture, our main bundled file is becoming smaller and smaller each time we lazy load a component.
+
+- this does not mean that we want to lazy load everything, if we lazy loaded every single component in our app we would sort of be defeating one of the main reasons why JavaScript single page applications are so great in the first place, which is instant rendering.
+
+- what should and what should not be lazy loaded? based on 2 factors:
+    - how large is the file size of the component
+    - how likely do we think our visitors are to actually need it or not?
+
+- if a file size is small and there's a great change that the user would use it, keep it in the main bundle.
+
+- lazy loading the chat and search component
+    - search: the transition component is going to add the appropriate CSS classes to its direct nearest child element
+
+    - chat
+-------------------------------------
+79. building a "Dist" copy of our side
+
+- set up a secondary webpack task that outputs these files to our actual hard drive ad makes sure these files are smallest file size
+
+- an app folder contains our source code that we actually work on as developers.
+- we have webpack setup so that it can automatically generate another folder called "dist" for distribution of files that can actually distribute to view the website by the public.
+- 
+- install package: dotenv-webpack, clean-webpack-plugin, html-webpack-harddisk-plugin, html-webpack-plugin, fs-extra
+
+- take out script src=bundled.js in index.html
+- rename index.html to index-template.html
+- create file: .env
+- add a script for package.json for npm run webpackBuild
+
+- npm run webpackBuild
+- create a file: previewDist.js
+- scripts: "previewDist": "node previewDist"
+
+-------------------------
+80. react outside of the browser
+
+- we can use react outside the context of a web browser so either on a server or just on our local machine.
+- we can use react to generate html
+- we can use our existing react components like Header, Footer to generate a static HTML file that can be displayed before the browser even has a chance to load and render all of our JS.
+
+- because our entire user interface and all of our HTML lives in our react components, the web browser doesn't have anything to display before it actually loads that JS files.
+
+- We can do better, by setting things up so that when someone comes to our website even if they're on a slow connection, even if our JS hasn't loaded and 
+
+
+----------------------------------------------
+83. Pushing our api backend server up to the web
+84. Pushing our react frontend up to the web
+
+
+-----------------------
+76. React Suspense for lazy loading
+79. building a "Dist" copy of our side
+80. react outside of the browser
+83. Pushing our api backend server up to the web
+84. Pushing our react frontend up to the web
+
+
+-----------------------
