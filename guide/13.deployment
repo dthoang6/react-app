@@ -26,6 +26,7 @@ const CreatePost = React.lazy(() => import("./components/CreatePost"))
 
 <Suspense fallback={<LoadingDotsIcon />}
 ....lazy loading components
+    <
 <Suspense />
 
 - when our app first loads, this is not going to contain the contents of that component because this really just contains a promise.
@@ -62,9 +63,10 @@ const CreatePost = React.lazy(() => import("./components/CreatePost"))
 - npm run webpackBuild
 - create a file: previewDist.js
 - scripts: "previewDist": "node previewDist"
+- npm run previewDist
 
 -------------------------
-80. react outside of the browser
+80. react outside of the browser: next.js
 
 - we can use react outside the context of a web browser so either on a server or just on our local machine.
 - we can use react to generate html
@@ -72,11 +74,47 @@ const CreatePost = React.lazy(() => import("./components/CreatePost"))
 
 - because our entire user interface and all of our HTML lives in our react components, the web browser doesn't have anything to display before it actually loads that JS files.
 
-- We can do better, by setting things up so that when someone comes to our website even if they're on a slow connection, even if our JS hasn't loaded and 
+- We can do better, by setting things up so that when someone comes to our website even if they're on a slow connection, even if our JS hasn't loaded, we see a skeleton of our layout in the html file
 
+- we want to create some sort of automated task or process that will generate index-template.html for us and we want it to pull from the JSX or HTML from our react header and footer components.
+
+- ReactDOMServer is what allows us to use React to generate HTML outside the context of a web browser.
+
+- create a file: generateHTML.js
+- adjust Header.js 
+- adjust package.json
+
+- set things up so that whenever you run npm run dev or npm run build, it just automatically runs our generateHTML task first.
+- and then once that finishes then it could actually spin up the dev server.
+
+- adjust for dev task and build task
+
+- the concept of combining client side react with server side react with the popular frameworks: next.js
 
 ----------------------------------------------
 83. Pushing our api backend server up to the web
+- using render of aws to host our backend api
+- netlify is only for front end and serverless applications
+
+- host backend-api on render using github
+    - github: create a new repository
+
+    - vsc: git init, git add -A, git commit -m 'first commit'
+    - git remote add origin [url of github repository]
+    - git push origin master
+
+    - render: 
+    - build command: npm install
+    - start command: node db.js
+    - environment to add environment from .env file to the server
+
+    - it means our back-end api is now available
+
+- push our react front end to netlify
+    - main.js
+    - chat.js
+    - update the link for back end: https://tom-react-complex-app.onrender.com
+
 84. Pushing our react frontend up to the web
 
 

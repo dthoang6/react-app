@@ -33,7 +33,7 @@ function Chat() {
   //listen for server send us a message
   useEffect(() => {
     //no matter how many times you log out or log back in, we are ending the socket connection and then reopening it at the appropriates times.
-    socket.current = io("http://localhost:8080")
+    socket.current = io(process.env.BACKENDURL || "https://tom-react-complex-app.onrender.com")
 
     socket.current.on("chatFromServer", message => {
       setState(draft => {
